@@ -63,13 +63,7 @@ namespace osu.Game.Rulesets.Catch.Difficulty
             value *= approachRateFactor;
 
             if (score.Mods.Any(m => m is ModHidden))
-            {
-                // Hiddens gives almost nothing on max approach rate, and more the lower it is
-                if (approachRate <= 10.0)
-                    value *= 1.05 + 0.075 * (10.0 - approachRate); // 7.5% for each AR below 10
-                else if (approachRate > 10.0)
-                    value *= 1.01 + 0.04 * (11.0 - Math.Min(11.0, approachRate)); // 5% at AR 10, 1% at AR 11
-            }
+                value *= 0.95 + Math.Pow(1.15, 6 - 2 * Math.Min(catchAttributes.ApproachRate, 11));
 
             if (score.Mods.Any(m => m is ModFlashlight))
                 value *= 1.35 * lengthBonus;
